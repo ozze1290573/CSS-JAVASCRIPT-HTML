@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8"> 
+    <title> SYSTEM SPECIFICATION: @$$€ GOLD STANDARD ENGINE
+			25 Jahre Engineering-Erfahrung in einem System.
+			LIZENZ & URHEBERRECHT: Diese Software ist geistiges Eigentum von @$$€. Jede Nutzung erfordert eine gültige Lizenz. Unbefugter Zugriff oder Kopspiraterie führt zur Systemsperre.
+			DIE PHILOSOPHIE: Dieses System ist das Ergebnis von über 25 Jahren Praxiserfahrung in der High-End-Messtechnik. Es wurde entwickelt, um die Lücke zwischen komplexer Hardware und effizienter Prüfung zu schließen.
+
+			DEINE WAHL – ZWEI WEGE ZUM ZIEL:
+			Der Profi-Weg (Empfohlen): Fuchse dich in das System ein! Mit meinem Interpreter kannst du ohne tiefgreifende Programmierkenntnisse professionelle Prüfprogramme erstellen. Du sparst Zeit und Geld und bleibst unabhängig. Du musst nur wissen, wie man misst und was Physik bedeutet – den Rest erledigt die Engine.
+
+			Das Sorglos-Paket: Du hast keine Zeit oder keine Lust? Dann überlasse die komplette Einrichtung dem Entwickler. Ich erstelle dir ein schlüsselfertiges System, perfekt auf deine Firma und dein Design zugeschnitten.
+			DAS VERSPRECHEN: Hervorragendes Design, intuitive Bedienung und absolute Stabilität. Erstelle High-End-Prüfprogramme ohne großen Aufwand.
+			Wer messen will, braucht Verstand. Wer Ergebnisse will, braucht ein gutes Prüfprogramm, das einfach und Leistungsfähig ist
+
+			English Version (for International Appeal):
+			LICENSE & PROPRIETARY NOTICE: This software is the intellectual property of @$$€. Usage is strictly tied to a valid license.
+			THE 25-YEAR LEGACY: This engine is not just code; it is the essence of 25 years in high-precision test engineering.
+
+			CHOOSE YOUR PATH:
+			Empower Yourself: I highly recommend learning the system. It allows you to create professional, high-end test routines with ease. No expert coding skills required—just a fundamental understanding of measurement physics. It’s the most cost-effective way to achieve professional results.
+			Full Service: If you prefer a turnkey solution, the developer can handle everything. Customized design and logic, tailored specifically to your corporate identity.
+			THE RESULT: Superior aesthetics, rock-solid stability, and professional-grade diagnostics without the typical overhead.
+			Precision made simple. Built by @$$€.</title>
+    <style>
+        :root 
+        {
+            --pass-dark:                #1e8449; 
+            --pass-light:               #e2f9e1;
+            --fail-dark:                #e74c3c;
+            --fail-light:               #fadbd8;
+            --undef-dark:               #ff9c3f;
+            --undef-light:              #ffd7b2;
+			--error-light:				khaki;
+			--error-dark:				yellow;
+            --border-black:             2px solid black;
+            --skala-farben:             green 0%, yellow 35%, orange 70%, red 100%;
+            --neon-yellow:              #ffff00;
+            --blue-outline:             blue;
+            --val:                      0%; 
+			--state:					fail;
+            --nav-blue:                 rgba(0,122,255,0.1);
+        }
+
+        body 
+        { 
+            font-family:                "Segoe UI", Arial, sans-serif; 
+            padding:                    20px; 
+            background:                 #f0f0f0; 
+            display:                    flex; 
+            flex-direction:             column; 
+            margin-top:                 40px; 
+            overflow-y:                 scroll; 
+        }
+
+        .nav-panel 
+        { 
+            position:                   fixed; 
+            top:                        10px; 
+            right:                      20px; 
+            display:                    flex; 
+            gap:                        5px; 
+            z-index:                    1000;
+        }
+
+        .btn-small 
+        { 
+            width:                      32px; 
+            height:                     32px; 
+            background:                 var(--nav-blue); 
+            border:                     1px solid rgba(0,122,255,0.3); 
+            border-radius:              4px; 
+            color:                      #004a99; 
+            cursor:                     pointer; 
+            display:                    flex; 
+            align-items:                center; 
+            justify-content:            center; 
+            font-size:                  20px; 
+            backdrop-filter:            blur(2px); 
+            opacity:                    0.5; 
+        }
+
+        .btn-small:hover 
+        { 
+            opacity:                    1; 
+        }
+
+        #errorNav 
+        { 
+            display:                    none; 
+            height:                     32px; 
+            padding:                    0 10px; 
+            background:                 var(--fail-dark); 
+            color:                      #ffffff; 
+            border:                     1px solid #e74c3c; 
+            border-radius:              4px; 
+            cursor:                     pointer; 
+            font-weight:                bold; 
+            font-size:                  12px; 
+            align-items:                center;
+            justify-content:            center;
+        }
+
+        .test-card 
+        {
+            display:                    grid; 
+            width:                      100%; 
+            grid-template-columns:      15% 30% 40% 15%; 
+            grid-template-rows:         35px auto;
+            border:                     var(--border-black); 
+            margin-bottom:              30px;
+            background:                 white;
+        }
+
+        .test-card > div 
+        { 
+            border:                     1px solid black; 
+            position:                   relative; 
+        }
+
+        .c-desc 
+        { 
+            grid-row:                   1; 
+            grid-column:                1 / span 4; 
+            color:                      black !important; 
+            font-weight:                bold; 
+            display:                    flex; 
+            align-items:                center; 
+            justify-content:            center; 
+            font-size:                  18px; 
+            letter-spacing:             10px; 
+            border-bottom:              var(--border-black) !important;
+        }
+
+        /* Status Farben tabellarisch ausgerichtet */
+        .pass                          
+		{ 
+			background-color:         	var(--pass-light); 
+		}
+        .fail                           
+		{ 
+			background-color:  			var(--fail-light);   								
+		}
+        .undef                          
+		{
+			background-color:         	var(--undef-light); 
+		}
+		.error                          
+		{
+			background-color:         	var(--lemon yellow); 
+		}
+		
+		.pass-desc 
+		{ 
+			background-color:       	var(--pass-dark) !important; 
+			--text-color:           	white; 
+		}
+		.fail-desc 
+		{ 
+			background-color:       	var(--fail-dark) !important; 
+			--text-color:           	white; 
+		}
+		.undef-desc 
+		{ 
+			background-color:       	var(--undef-dark) !important; 
+			--text-color:           	black;
+		}
+		.error-desc 
+		{ 
+			background-color:       	var(--error-dark) !important; 
+			--text-color:           	red;
+		}
+        .c-value 
+        { 
+            grid-row:                   2; 
+            grid-column:                2; 
+            display:                    flex; 
+            align-items:                center; 
+            justify-content:            center; 
+            font-family:                "Consolas", monospace; 
+            font-weight:                bold; 
+            white-space:                nowrap; 
+            overflow:                   hidden; 
+            padding:                    5px 5px; 
+            font-size:                  40px;
+        }
+		
+		
+		/* Limits & Tabelle */
+        .c-limits 
+		{ 
+			grid-row: 2;
+			grid-column: 3; 
+			display: grid; 
+			grid-template-columns: 1fr 4px 1fr; 
+			grid-template-rows: 14px 14px 14px 14px 25px 16px;
+			padding: 10px 10px; 
+			border-right:
+			var(--border-black) !important; 
+		}
+        .f-label, .f-wert 
+		{ 
+			font-size: 12px; 
+			display: flex; 
+			align-items: flex-end; 
+			font-weight: normal; 
+		}
+        .f-wert 
+		{ 
+			grid-column: 3; 
+			text-align: right; 
+			justify-content: flex-end; 
+			font-family: "Consolas", monospace; 
+		}
+
+        /* Neon Styles (Dein Medium Blue Rand) */
+        .u-style 
+		{ 
+			color: var(--neon-yellow); 
+			font-weight: bold; 
+			text-shadow: 
+			1px 0px 1px blue,
+			0px 1px 1px blue ,
+			-1px 0px 1px blue,
+			0px -1px 1px blue; 
+			outletter-spacing: 1px; 
+		}
+        .u-na 
+		{ 
+			color: #999;
+		}
+
+		.axis-labels 
+		{
+			position: absolute; 
+			top: 0px; 
+			width: 100%; 
+			height: 8px; 
+			pointer-events: none; 
+		}
+		
+        .label 
+		{ 
+			position: absolute; 
+			font-size: 8px; 
+			font-weight: 600; 
+			transform: translateX(-50%); 
+		}
+        
+		.n-100 	
+		{ 
+			left:  	calc(100% - 100%); 	
+		} 
+		.n-75 	
+		{ 
+			left: 	calc((100% -	(25/2)%); 	
+		}
+		.n-50 	
+		{ 
+			left: 	calc((100% -	(50/2)%);  	
+		}
+		.n-25 	
+		{ 
+			left: 	calc((100% -	(75/2)%); 	
+		}
+		.p-0 	
+		{ 
+			left: 	calc((100% -	(100/2)%);	
+		} 
+		.p-25 	
+		{ 
+			left: 62.5%; 	
+		} 
+			.p-50 	
+		{ 
+			left: 75%; 	
+		} 
+			.p-75 	
+		{ 
+			left: 87.5%; 	
+		} 
+			.p-100	
+		{ 
+			left: 99%; 	
+		}
+
+		
+        .grafik-row 
+        { 
+            grid-row:                   6; 
+            grid-column:                1 / span 3; 
+            position:                   relative; 
+            height:                     14px; 
+            margin-top:                 5px; 
+            border:                     1px solid black; 
+            background:                 white; 
+        }
+
+        .grafik-row.ist-positiv 
+        { 
+            --richtung:                 to right; 
+            --pos-grafik:               50%; 
+            --pos-text:                 0; 
+            --text-align:               flex-end; 
+            --margin-grafik:            0 0 0 2px; /*0 0 0 6px; top,right bottom left*/
+            --margin-text:              0 6px 0 0; 
+        }
+
+        .grafik-row.ist-negativ 
+        { 
+            --richtung:                 to left; 
+            --pos-grafik:               0; 
+            --pos-text:                 50%; 
+            --text-align:               flex-start; 
+            --margin-grafik:            0 2px 0 0; 
+            --margin-text:              0 0 0 6px; 
+        }
+		
+       . center-line 
+	   { 
+			position: absolute; 
+			left: calc( 50% - 2px); 
+			top: 0; 
+			bottom: 0; 
+			width: 4px; 
+			background: black; 
+			transform: translateX(-50%); 
+			z-index: 10; 
+		}
+
+        .grad-fill 
+        { 
+            position:                   absolute; 
+            width:                      100%; 
+            height:                     100%; 
+            top:                        0; 
+            background:                 linear-gradient(var(--richtung), var(--skala-farben)); 
+        }
+
+        .roter-balken 
+        { 
+            position:                   absolute; 
+            top:                        -6px; 
+            height:                     13px; 
+            z-index:                    20; 
+            display:                    block; 
+        }
+
+        .roter-balken::before 
+        { 
+            content:                    ""; 
+            position:                   absolute; 
+            top:                        0; 
+            left:                       0; 
+            width:                      100%; 
+            height:                     6px; 
+            background-color:           var(--neon-yellow) !important; 
+            box-shadow:                 0 0 0 1px var(--blue-outline); 
+            z-index:                    25; 
+        }
+		.roter-balken::after 
+		{ 
+			content: ""; 
+			position: absolute; left: 50%; 
+			top: 6px; height: 7px; 
+			width: 1px; 
+			background-color: var(--neon-yellow) !important; 
+			box-shadow: 0 0 0 1.5px var(--blue-outline); 
+			transform: translateX(-50%); 
+		}
+
+        /* Bild & Modal */
+        .c-img 
+		{ 
+			grid-row: 2; 
+			grid-column: 4; 
+			display: flex; 
+			align-items: center; 
+			justify-content: center;
+			background: transparent !important; 
+			padding: 5px;
+			z-index: 50; 
+		}
+        .img-content 
+		{ 
+			width: 100%; 
+			height: 100%; 
+			object-fit: fill; 
+			background: #fff; 
+			cursor: pointer; 
+			transition: transform 0.1s;  
+			transform-origin: top right; 
+		}
+        .img-content:hover 
+		{ 
+		transform: scale(2.5);
+		}
+
+
+
+
+        #imgModal 
+        {
+            display:                    none; 
+            position:                   fixed; 
+            z-index:                    2000; 
+            left:                       0; 
+            top:                        0; 
+            width:                      100%; 
+            height:                     100%; 
+            background-color:           rgba(0,0,0,0.8); 
+            align-items:                center; 
+            justify-content:            center;
+        }
+
+        #modalImg 
+        {
+            max-width:                  90%;
+            max-height:                 90%;
+            border:                     3px solid var(--state-dark);
+        }
+    </style>
+
+    <script>
+        let i = -1;
+
+        const h = () => 
+        {
+            window.scrollTo({top: 0, behavior: "smooth"});
+        };
+
+        const b = () => 
+        {
+            window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});
+        };
+
+        const updateErrorBtn = () => 
+        {
+            const errors = document.querySelectorAll(".test-card.fail");
+            const btn = document.getElementById("errorNav");
+            if (btn) 
+            {
+                if (errors.length > 0) 
+                {
+                    btn.style.display = "flex";
+                    btn.innerHTML = "! " + errors.length + " !";
+                } 
+                else 
+                {
+                    btn.style.display = "none";
+                }
+            }
+        };
+
+        const j = (richtung) => 
+        {
+            const errors = document.querySelectorAll(".test-card.fail");
+            if (!errors.length) return;
+            
+            i = (i + richtung + errors.length) % errors.length;
+            errors[i].scrollIntoView({behavior: "smooth", block: "center"});
+            
+            document.querySelectorAll(".test-card").forEach(el => 
+            { 
+                el.style.boxShadow = "none"; 
+            });
+            errors[i].style.boxShadow = "0 0 15px yellow";
+        };
+        // --- FUNKTION 2: Neues Ergebnis hinzufügen (kommt aus C#) ---
+        const appendNewResult = (htmlString) => {
+            const container = document.getElementById("results-container");
+            if (!container) return;
+
+            // 1. Einfügen
+            container.insertAdjacentHTML("beforeend", htmlString);
+            
+            // 2. Fehler-Zähler aktualisieren (Das ist neu!)
+            updateErrorBtn();
+
+            // 3. Scrollen zum NEUEN Element (ganz unten)
+            // Hier gibt es kein e[i] mehr -> kein Absturz!
+            const dasNeueste = container.lastElementChild;
+            if (dasNeueste) {
+                dasNeueste.scrollIntoView({behavior: "smooth", block: "center"});
+                
+                // Falls du IDs für den Font-Resizer nutzt, hier aufrufen:
+                // if(dasNeueste.querySelector(".c-value")) fitValueText(...) 
+            }
+        };
+    
+        // --- FUNKTION 3: FONT RESIZER (HIER IST DER FIX) ---
+ 
+
+ 
+	// =================================================================
+    // DEIN NEUER TURBO-ALGORITHMUS (BINÄRE SUCHE)
+    // =================================================================
+	function fitValueText(elementId) 
+	{
+		var el = document.getElementById(elementId);
+		if (!el) return;
+
+		// Wir bleiben bei deinen festen Stufen für die Optik
+		var stufen = [40, 32, 24, 18]; // Feste Pixel-Werte für maximale Ruhe
+		
+		for (var i = 0; i < stufen.length; i++) 
+		{
+			el.style.fontSize = stufen[i] + 'px';
+			
+			// Passt es in die prozentual vorgegebene Breite?
+			if (el.scrollWidth <= el.clientWidth)
+			{
+				break; 
+			}
+		}
+	}
+        function openModal(imgSrc) 
+        {
+            const modal = document.getElementById("imgModal");
+            const modalImg = document.getElementById("modalImg");
+            modal.style.display = "flex";
+            modalImg.src = imgSrc;
+        }
+
+        function closeModal() 
+        {
+            document.getElementById("imgModal").style.display = "none";
+        }
+    </script>^ö,0ßpö´. uo-
+</head>
+<body>
+
+
+<div class="nav-panel">
+	<button class   ="btn-small" onclick="h()"  >🏠 </button>
+	<button class   ="btn-small" onclick="j(-1)">◀ </button>
+	<button id      ="errorNav"  onclick="j(1)" >! </button>
+	<button class   ="btn-small" onclick="j(1)" >▶ </button>
+	<button class   ="btn-small" onclick="b()"  >▼ </button>
+</div>
+
+    <div id="imgModal" onclick="closeModal()">
+        <span id="closeModal">&times;</span>
+        <img id="modalImg">
+    </div>
+
+    <div id="results-container"></div>
+
+</body>
+</html>

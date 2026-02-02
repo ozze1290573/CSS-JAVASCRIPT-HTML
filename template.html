@@ -1,0 +1,53 @@
+<div class="test-card {{TESTRESULT}}">
+    <div class="c-desc {{TESTRESULT_DESC}}"><b>{{VAL_ID}}</b><span style="padding-right:40px"></span>{{BESCHREIBUNG}}</div>
+    
+	<div class="c-date">{{DATE}}<span class=".c-date-umbruch">{{TIME}}</span></div>
+    
+        
+    <div id="{{VAL_ID}}" class="c-value">{{VALUE}}</div>
+	 <script>fitValueText('{{VAL_ID}}');</script>
+
+    <div class="c-limits">
+        <div class="f-label">OG:</div>
+			<div></div>
+		<div class="f-wert">{{OG}}</div>
+        <div class="f-label">UG:</div>
+		<div></div>
+		<div class="f-wert">{{UG}}</div>
+        <div class="f-label">Abw:</div>
+		<div></div>
+		<div class="f-wert">{{ABWEICHUNG}} %</div>
+        <div class="f-label {{FORMAT}}">&#x1D4B0;:</div>
+		<div></div>
+		<div class="f-wert  {{FORMAT}}">&#177; {{MESSABWEICHUNG}}</div>
+
+        <div class="axis-container">
+            <div class="axis-labels">
+				<span class="label n-100">-100</span>
+				<span class="label n-75"  >-75</span>
+				<span class="label n-50"  >-50</span>
+				<span class="label n-25"  >-25</span>
+				<span class="label p-0"     >0</span>
+				<span class="label p-25"  >+25</span>
+				<span class="label p-50"  >+50</span>	
+				<span class="label p-75"  >+75</span>
+				<span class="label p-100">+100</span>
+			</div>
+            <div class="axis-ticks"></div>
+        </div>
+
+        <div class="grafik-row {{CLASS_LOGIC}}" style="--val: {{ABS_ABWEICHUNG_MESSABWEICHUNG}}%;">
+            <div class="center-line"></div>
+            <div class="text-wrapper"><span>{{ABWEICHUNG_MESSABWEICHUNG}} %</span></div>
+            <div class="grafik-wrapper">
+                <div class="grad-fill"></div>
+                <div class="vorhang" style="width:{{VORHANG}}%"></div>
+                <div class="roter-balken" style="left: {{VORHANG}}%; width:{{MESSABWEICHUNG_x2}}%;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="c-img">
+        <img src="{{BILD}}" class="img-content" style=" border: 3px solid {{IMG_BORDER_COLOR}};">
+    </div>
+</div>
